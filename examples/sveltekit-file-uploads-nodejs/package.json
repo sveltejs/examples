@@ -13,8 +13,8 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-node": "^1.2.0",
-		"@sveltejs/kit": "^1.8.3",
-		"eslint": "^8.34.0",
+		"@sveltejs/kit": "^1.9.0",
+		"eslint": "^8.35.0",
 		"eslint-config-prettier": "^8.6.0",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"prettier": "^2.8.4",
