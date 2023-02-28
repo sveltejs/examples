@@ -5,7 +5,7 @@ import { pipeline } from 'node:stream/promises';
 
 import { fail } from '@sveltejs/kit';
 
-const DIR = process.env.FILES_DIR ?? 'files';
+const DIR = process.env.FILES_DIR ?? 'temp-files';
 
 if (!fs.existsSync(DIR)) {
 	fs.mkdirSync(DIR, { recursive: true });
