@@ -47,7 +47,7 @@
 						action="?/delete"
 						enctype="multipart/form-data"
 					>
-						<button name="file" value={file.name}>Delete</button>
+						<button name="file_name" value={file.name}>Delete</button>
 					</form>
 				</li>
 			{/each}
