@@ -48,6 +48,7 @@ input[type="file"]::file-selector-button {
 
 label,
 textarea,
+progress,
 input:where([type="email"], [type="password"], [type="search"], [type="tel"], [type="text"], [type="url"], [type="file"]) {
   display: block;
   width: 100%;
