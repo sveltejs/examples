@@ -25,6 +25,10 @@
 			progress.set(Math.ceil($upload.progress) / 100);
 			break;
 
+		case 'error':
+			progress.set(0);
+			break;
+
 		case 'completed':
 			invalidateAll();
 			break;

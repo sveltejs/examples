@@ -22,7 +22,7 @@ export function create_upload() {
       });
 
       xhr.addEventListener("loadend", (event) => {
-        const status = xhr.status < 400 ? 'completed' : 'error';
+        const status = xhr.status > 0 && xhr.status < 400 ? 'completed' : 'error';
 
         update(state => ({ ...state, status }));
       });
