@@ -17,8 +17,14 @@ export async function GET({ params, request }) {
 	}
 
 	const stats = fs.statSync(file_path);
+	const etag = `W/"${stats.size}-${stats.mtime.getTime()}"`;
+
+	if (request.headers.get('if-none-match') === etag) {
+		return new Response(null, { status: 304 });
+	}
 
 	const headers = {
+		'ETag': etag,
 		'Content-Type': mimes.lookup(file_path),
 		'Content-Length': stats.size,
 		'Cache-Control': 'max-age=60',
