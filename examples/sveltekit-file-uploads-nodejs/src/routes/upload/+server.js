@@ -13,22 +13,20 @@ if (!fs.existsSync(DIR)) {
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST(event) {
+  if (event.request.body instanceof ReadableStream === false){
+    return new Response(null, { status: 400 });
+  }
+
   const file_name = event.request.headers.get('x-file-name');
 
   if (!file_name) {
-    event.request.body?.cancel();
-    return new Response(null, { status: 400 });
+    event.request.body.cancel();
   }
 
   const file_path = path.normalize(path.join(DIR, file_name));
 
   if (fs.existsSync(file_path)) {
-    event.request.body?.cancel();
-    return new Response(null, { status: 400 });
-  }
-
-  if (event.request.body instanceof ReadableStream === false){
-    return new Response(null, { status: 400 });
+    event.request.body.cancel();
   }
 
   const nodejs_wstream = fs.createWriteStream(file_path);
