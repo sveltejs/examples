@@ -13,7 +13,7 @@ if (!fs.existsSync(DIR)) {
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST(event) {
-  if (event.request.body instanceof ReadableStream === false){
+  if (event.request.body instanceof ReadableStream === false) {
     return new Response(null, { status: 400 });
   }
 
@@ -21,12 +21,18 @@ export async function POST(event) {
 
   if (!file_name) {
     event.request.body.cancel();
+    // Note: This does not do anything if the body is cancelled
+    // but we return it anyway
+    return new Response(null, { status: 400 });
   }
 
   const file_path = path.normalize(path.join(DIR, file_name));
 
   if (fs.existsSync(file_path)) {
     event.request.body.cancel();
+    // Note: This does not do anything if the body is cancelled
+    // but we return it anyway
+    return new Response(null, { status: 400 });
   }
 
   const nodejs_wstream = fs.createWriteStream(file_path);
@@ -35,7 +41,7 @@ export async function POST(event) {
   const nodejs_rstream = Readable.fromWeb(web_rstream);
   // Write file to disk and wait for it to finish
   await pipeline(nodejs_rstream, nodejs_wstream).catch(error => {
-		fs.unlinkSync(file_path);
+    fs.unlinkSync(file_path);
 
     return new Response(null, { status: 500 });
   });
