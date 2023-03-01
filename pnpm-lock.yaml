@@ -43,7 +43,7 @@ importers:
   examples/sveltekit-file-uploads-nodejs:
     specifiers:
       '@sveltejs/adapter-node': ^1.2.0
-      '@sveltejs/kit': ^1.9.0
+      '@sveltejs/kit': ^1.9.2
       eslint: ^8.35.0
       eslint-config-prettier: ^8.6.0
       eslint-plugin-svelte3: ^4.0.0
@@ -54,8 +54,8 @@ importers:
       typescript: ^4.9.5
       vite: ^4.1.4
     devDependencies:
-      '@sveltejs/adapter-node': 1.2.0_@sveltejs+kit@1.9.0
-      '@sveltejs/kit': 1.9.0_svelte@3.55.1+vite@4.1.4
+      '@sveltejs/adapter-node': 1.2.0_@sveltejs+kit@1.9.2
+      '@sveltejs/kit': 1.9.2_svelte@3.55.1+vite@4.1.4
       eslint: 8.35.0
       eslint-config-prettier: 8.6.0_eslint@8.35.0
       eslint-plugin-svelte3: 4.0.0_n4ieifq2d7jq3sqoe474cgqlim
@@ -422,7 +422,7 @@ packages:
       import-meta-resolve: 2.2.1
     dev: true
 
-  /@sveltejs/adapter-node/1.2.0_@sveltejs+kit@1.9.0:
+  /@sveltejs/adapter-node/1.2.0_@sveltejs+kit@1.9.2:
     resolution: {integrity: sha512-j0nxkrNZ4zBkOIOtqHUET5l8qvcFo64xNL2xv8F1QICkz746o5DVCGaJEPC3B2X2fTklXExxe80yXZhf38p6zg==}
     peerDependencies:
       '@sveltejs/kit': ^1.0.0
@@ -430,7 +430,7 @@ packages:
       '@rollup/plugin-commonjs': 24.0.1_rollup@3.17.3
       '@rollup/plugin-json': 6.0.0_rollup@3.17.3
       '@rollup/plugin-node-resolve': 15.0.1_rollup@3.17.3
-      '@sveltejs/kit': 1.9.0_svelte@3.55.1+vite@4.1.4
+      '@sveltejs/kit': 1.9.2_svelte@3.55.1+vite@4.1.4
       rollup: 3.17.3
     dev: true
 
@@ -462,8 +462,8 @@ packages:
       - supports-color
     dev: true
 
-  /@sveltejs/kit/1.9.0_svelte@3.55.1+vite@4.1.4:
-    resolution: {integrity: sha512-+r/jLe0BORdUfgXK0roN9qOeKt9lLsWOxvCEvkZrM9+ZwGtN4Xic3TG5HURfc7j94/+RT+xb7CR/Orw3Wy7wMg==}
+  /@sveltejs/kit/1.9.2_svelte@3.55.1+vite@4.1.4:
+    resolution: {integrity: sha512-KYDrzs9bdoK+3typr5eBa+8q+RFwZdI80tuSL1yU99Rn5hZsEbcj4tlBGVvlL7SHxJdMUiDUYhTznbpb7CIs9A==}
     engines: {node: ^16.14 || >=18}
     hasBin: true
     requiresBuild: true
