@@ -36,15 +36,7 @@ export const actions = {
 
 		const file = data.get('file');
 
-		if (!file) {
-			return fail(400);
-		}
-
-		if (file instanceof File === false) {
-			return fail(400);
-		}
-
-		if (file.size === 0) {
+		if (file instanceof File === false || file.size === 0) {
 			return fail(400);
 		}
 
@@ -70,13 +62,13 @@ export const actions = {
 		const file_name = data.get('file_name');
 
 		if (!file_name) {
-			return
+			return fail(400);
 		}
 
 		const file_path = path.normalize(path.join(DIR, file_name));
 
 		if (!fs.existsSync(file_path)) {
-			return
+			return fail(400);
 		}
 
 		fs.unlinkSync(file_path);
