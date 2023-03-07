@@ -30,7 +30,7 @@
 			break;
 
 		case 'completed':
-			invalidateAll();
+			invalidateAll().then(_ => progress.set(0));
 			break;
 	}
 
