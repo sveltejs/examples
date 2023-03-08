@@ -15,8 +15,8 @@
 
 	const upload = create_upload();
 
-	let is_form_1_submitting = false;
-	let is_form_2_submitting = false;
+	let is_small_submitting = false;
+	let is_large_submitting = false;
 
 	const progress = tweened(0, {
 		duration: 400,
@@ -26,7 +26,7 @@
 	$: progress.set(Math.ceil($upload.progress) / 100);
 
 	async function handle_large_submit(event) {
-		is_form_2_submitting = true;
+		is_large_submitting = true;
 
 		const file = event.target.elements['file'].files[0];
 		const headers = { 'x-file-name': file.name };
@@ -37,7 +37,7 @@
 		// Reset file input
 		event.target.reset();
 
-		is_form_2_submitting = false;
+		is_large_submitting = false;
 	}
 </script>
 
@@ -50,11 +50,11 @@
 		action="?/upload"
 		enctype="multipart/form-data"
 		use:enhance={({ form }) => {
-			is_form_1_submitting = true;
+			is_small_submitting = true;
 
 			return ({ update }) => {
 				update().then(() => {
-					is_form_1_submitting = false;
+					is_small_submitting = false;
 				});
 			};
 		}}
@@ -63,8 +63,8 @@
 			<label for="file">Select a small file</label>
 			<input type="file" name="file" id="file" required />
 		</div>
-		<button disabled={is_form_1_submitting} class:--loading={is_form_1_submitting}>
-			{#if is_form_1_submitting}
+		<button disabled={is_small_submitting} class:--loading={is_small_submitting}>
+			{#if is_small_submitting}
 				Uploading...
 			{:else}
 				Upload
@@ -78,8 +78,8 @@
 			<input type="file" name="file" id="file" required />
 		</div>
 		<progress value={$progress} />
-		<button disabled={is_form_2_submitting} class:--loading={is_form_2_submitting}>
-			{#if is_form_2_submitting}
+		<button disabled={is_large_submitting} class:--loading={is_large_submitting}>
+			{#if is_large_submitting}
 				Uploading...
 			{:else}
 				Upload
