@@ -3,13 +3,13 @@
 This example demonstrates how you can handle file uploads with SvelteKit and Node.js in two different ways. Both forms write files to the local disk. Uploaded files are served through the `src/routes/files/+server.js` endpoint.
 
 ## Small file uploads
-Key things to consider are:
+Key things to know are:
 - Works with and without JavaScript
-- Uses FormData and SvelteKit's form actions
+- Uses `FormData` and SvelteKit's form actions
 - Should only be used for small files such as avatar images because there is no progress indicator and writing the file to disk requires first parsing the whole body with `event.request.formData()`
 
 ## Large file uploads
-Key things to consider are:
+Key things to know are:
 - JavaScript is required for this to work
 - The upload logic is encapsulated in a custom store
 - `XMLHTTPRequest` is used  because `fetch` cannot be used (yet) to calculate the upload progress
