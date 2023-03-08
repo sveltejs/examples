@@ -92,7 +92,19 @@
 	{#if !data?.files.length}
 		<p>No files have been uploaded yet.</p>
 	{:else}
-		<ol class="files">
+		<ol
+			class="files"
+			on:submitstart={(e) => {
+				const button = e.target.querySelector('button');
+				button?.classList.add('--loading');
+				button?.setAttribute('disabled', 'true');
+			}}
+			on:submitend={(e) => {
+				const button = e.target.querySelector('button');
+				button?.classList.remove('--loading');
+				button?.removeAttribute('disabled');
+			}}
+		>
 			{#each data.files as file (file.Key)}
 				<li class="file" transition:slide={{ duration: 200 }}>
 					<span class="file__size">{(file.Size / 1000).toFixed(1)} kB</span>
