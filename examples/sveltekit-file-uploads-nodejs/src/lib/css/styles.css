@@ -83,8 +83,6 @@ input[type="file"]::file-selector-button {
   cursor: pointer;
 }
 
-input[type="file"]::file-selector-button {}
-
 button:hover {
   filter: brightness(1.1);
 }
