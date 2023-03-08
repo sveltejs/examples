@@ -49,7 +49,7 @@
 		method="POST"
 		action="?/upload"
 		enctype="multipart/form-data"
-		use:enhance={({ form }) => {
+		use:enhance={() => {
 			is_small_submitting = true;
 
 			return ({ update }) => {
