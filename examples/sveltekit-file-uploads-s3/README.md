@@ -1,38 +1,26 @@
-# create-svelte
+# SvelteKit file uploads with Node.js
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+This example demonstrates how you can handle file uploads with SvelteKit and an S3 compatible service such as Cloudflare R2, DigitalOcean Spaces, AWS S3 etc. in two different ways. The first form first sends the file as `FormData` to the SvelteKit server and from there uploads it to S3. The second form for large files generates a presigned URL on the server that the client then uses to directly upload the file to S3 withough the file first having to go through the SvelteKit server.
 
-## Creating a project
+## Form 1: Small file uploads
+Key things to know are:
+- Works with and without JavaScript
+- Uses FormData and SvelteKit's form actions
+- Should only be used for small files such as avatar images because there is no progress indicator and the file first needs parsing the whole body with `event.request.formData()`
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Form 2: Large file uploads
+Key things to know are:
+- JavaScript is required for this to work
+- The upload logic is encapsulated in a custom store
+- `src/routes/presigned-url/+server.js` generates the upload URL
+- `XMLHTTPRequest` is used to upload the file because `fetch` cannot be used (yet) to calculate the upload progress
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+To try out this example in development you can create a `.env` file in the project root with the following environment variables and run `pnpm i && pnpm dev`
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+S3_REGION='<region>'
+S3_BUCKET='<S3 bucket name>'
+S3_ENDPOINT='<S3 API URL>'
+S3_ACCESS_KEY_ID='<Your S3 access key ID>'
+S3_SECRET_ACCESS_KEY='<Your S3 secret access id>'
+PUBLIC_S3_BUCKET_URL='<Public S3 bucket URL>'
 ```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
