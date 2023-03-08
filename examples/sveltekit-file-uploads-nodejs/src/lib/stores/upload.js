@@ -28,7 +28,11 @@ export function create_upload() {
 
           update(state => ({ ...state, status }));
 
-          resolve(xhr);
+          if (status === 'error') {
+            reject();
+          } else {
+            resolve(xhr);
+          }
         });
 
         xhr.upload.addEventListener("error", (event) => {
