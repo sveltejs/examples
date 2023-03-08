@@ -15,43 +15,61 @@
 
 	const upload = create_upload();
 
+	let is_form_1_submitting = false;
+	let is_form_2_submitting = false;
+
 	const progress = tweened(0, {
 		duration: 400,
 		easing: cubicOut
 	});
 
-	$: switch ($upload.status) {
-		case 'uploading':
-			progress.set(Math.ceil($upload.progress) / 100);
-			break;
+	$: progress.set(Math.ceil($upload.progress) / 100);
 
-		case 'error':
-			progress.set(0);
-			break;
+	async function handle_large_submit(event) {
+		is_form_2_submitting = true;
 
-		case 'completed':
-			invalidateAll().then(_ => progress.set(0));
-			break;
-	}
-
-	function handle_large_submit(event) {
-		const file = event.currentTarget.elements['file'].files[0];
-
+		const file = event.target.elements['file'].files[0];
 		const headers = { 'x-file-name': file.name };
 
-		upload.start({ url: '/upload', file, headers });
+		await upload.start({ url: '/upload', file, headers });
+		await invalidateAll();
+		progress.set(0);
+		// Reset file input
+		event.target.reset();
+
+		is_form_2_submitting = false;
 	}
 </script>
 
 <h1>Upload and view files with SvelteKit and Node.js</h1>
 
 <div class="forms">
-	<form class="small" method="POST" action="?/upload" enctype="multipart/form-data" use:enhance>
+	<form
+		class="small"
+		method="POST"
+		action="?/upload"
+		enctype="multipart/form-data"
+		use:enhance={({ form }) => {
+			is_form_1_submitting = true;
+
+			return ({ update }) => {
+				update().then(() => {
+					is_form_1_submitting = false;
+				});
+			};
+		}}
+	>
 		<div>
 			<label for="file">Select a small file</label>
 			<input type="file" name="file" id="file" required />
 		</div>
-		<button>Upload</button>
+		<button disabled={is_form_1_submitting} class:--loading={is_form_1_submitting}>
+			{#if is_form_1_submitting}
+				Uploading...
+			{:else}
+				Upload
+			{/if}
+		</button>
 	</form>
 
 	<form class="large" on:submit|preventDefault={handle_large_submit}>
@@ -60,7 +78,13 @@
 			<input type="file" name="file" id="file" required />
 		</div>
 		<progress value={$progress} />
-		<button disabled={$upload.status === 'uploading'}>Upload</button>
+		<button disabled={is_form_2_submitting} class:--loading={is_form_2_submitting}>
+			{#if is_form_2_submitting}
+				Uploading...
+			{:else}
+				Upload
+			{/if}
+		</button>
 	</form>
 </div>
 
@@ -69,7 +93,19 @@
 	{#if !data?.files.length}
 		<p>No files have been uploaded yet.</p>
 	{:else}
-		<ol class="files">
+		<ol
+			class="files"
+			on:submitstart={(e) => {
+				const button = e.target.querySelector('button');
+				button?.classList.add('--loading');
+				button?.setAttribute('disabled', 'true');
+			}}
+			on:submitend={(e) => {
+				const button = e.target.querySelector('button');
+				button?.classList.remove('--loading');
+				button?.removeAttribute('disabled');
+			}}
+		>
 			{#each data.files as file (file.name)}
 				<li class="file" transition:slide={{ duration: 200 }}>
 					<span class="file__size">{(file.size / 1000).toFixed(1)} kB</span>
@@ -78,10 +114,16 @@
 					</a>
 					<form
 						class="file__actions"
-						use:enhance
 						method="POST"
 						action="?/delete"
 						enctype="multipart/form-data"
+						use:enhance={({ form }) => {
+							form.dispatchEvent(new Event('submitstart', { bubbles: true }));
+
+							return ({ update }) => {
+								update().then(() => form.dispatchEvent(new Event('submitend', { bubbles: true })));
+							};
+						}}
 					>
 						<button name="file_name" value={file.name}>Delete</button>
 					</form>
