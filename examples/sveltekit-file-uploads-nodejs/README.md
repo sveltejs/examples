@@ -1,38 +1,20 @@
-# create-svelte
+# SvelteKit file uploads with Node.js
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+This example demonstrates how you can handle file uploads with SvelteKit and Node.js in two different ways. Both forms write files to the local disk. Uploaded files are served through the `src/routes/files/+server.js` endpoint.
 
-## Creating a project
+## Small file uploads
+Key things to know are:
+- Works with and without JavaScript
+- Uses `FormData` and SvelteKit's form actions
+- Should only be used for small files such as avatar images because there is no progress indicator and writing the file to disk requires first parsing the whole body with `event.request.formData()`
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Large file uploads
+Key things to know are:
+- JavaScript is required for this to work
+- The upload logic is encapsulated in a custom store
+- `XMLHTTPRequest` is used  because `fetch` cannot be used (yet) to calculate the upload progress
+- The file object from the file input element is used as the body
+- Additional information such as the file name is passed to the server using custom headers such as `x-file-name`
+- If a file was already uploaded before the endpoint closes the connection by calling `event.body.cancel()`
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+**Note:** This example makes use of the  `Readable.fromWeb()` API to convert between web streams and Node.js streams so Node.js >= 17.0.0 is required.
