@@ -92,19 +92,7 @@
 	{#if !data?.files.length}
 		<p>No files have been uploaded yet.</p>
 	{:else}
-		<ol
-			class="files"
-			on:submitstart={(e) => {
-				const button = e.target.querySelector('button');
-				button?.classList.add('--loading');
-				button?.setAttribute('disabled', 'true');
-			}}
-			on:submitend={(e) => {
-				const button = e.target.querySelector('button');
-				button?.classList.remove('--loading');
-				button?.removeAttribute('disabled');
-			}}
-		>
+		<ol class="files">
 			{#each data.files as file (file.Key)}
 				<li class="file" transition:slide={{ duration: 200 }}>
 					<span class="file__size">{(file.Size / 1000).toFixed(1)} kB</span>
@@ -121,11 +109,15 @@
 						method="POST"
 						action="?/delete"
 						enctype="multipart/form-data"
-						use:enhance={({ form }) => {
-							form.dispatchEvent(new Event('submitstart', { bubbles: true }));
+						use:enhance={({ submitter }) => {
+							submitter?.classList.add('--loading');
+							submitter?.setAttribute('disabled', 'true');
 
 							return ({ update }) => {
-								update().then(() => form.dispatchEvent(new Event('submitend', { bubbles: true })));
+								update().then(() => {
+									submitter?.classList.remove('--loading');
+									submitter?.removeAttribute('disabled');
+								});
 							};
 						}}
 					>
