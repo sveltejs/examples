@@ -19,7 +19,7 @@ export async function POST(event) {
   const put_object_params = {
     Bucket: env.S3_BUCKET,
     Key: body.key,
-    ContentType: body.size
+    ContentLength: body.size
   }
 
   const url = await getSignedUrl(S3, new PutObjectCommand(put_object_params), { expiresIn: 3600 })
