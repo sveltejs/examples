@@ -2,16 +2,12 @@
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-
 	import { create_upload } from '$lib/stores/upload';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
-	/** @type {import('./$types').ActionData} */
-	export let form;
 
 	const upload = create_upload();
 
@@ -25,17 +21,19 @@
 
 	$: progress.set(Math.ceil($upload.progress) / 100);
 
+	/** @param {SubmitEvent} event */
 	async function handle_large_submit(event) {
 		is_large_submitting = true;
 
-		const file = event.target.elements['file'].files[0];
+		const target = /** @type {EventTarget & HTMLFormElement} */ (event.target);
+		const file = target.elements.file.files[0];
 		const headers = { 'x-file-name': file.name };
 
 		await upload.start({ url: '/upload', file, headers });
 		await invalidateAll();
 		progress.set(0);
 		// Reset file input
-		event.target.reset();
+		target.reset();
 
 		is_large_submitting = false;
 	}
