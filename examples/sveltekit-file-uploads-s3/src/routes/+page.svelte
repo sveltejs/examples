@@ -23,16 +23,18 @@
 
 	$: progress.set(Math.ceil($upload.progress) / 100);
 
+	/** @param {SubmitEvent} event */
 	async function handle_large_submit(event) {
 		is_large_submitting = true;
 
-		const file = event.currentTarget.elements['file'].files[0];
+		const target = /** @type {EventTarget & HTMLFormElement} */ (event.target);
+		const file = target.elements.file.files[0];
 
 		await upload.start({ file });
 		await invalidateAll();
 		progress.set(0);
 		// Reset file input
-		event.target.reset();
+		target.reset();
 
 		is_large_submitting = false;
 	}

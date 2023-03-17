@@ -1,56 +1,56 @@
 import { writable } from 'svelte/store';
 
 export function create_upload() {
-  const { subscribe, set, update } = writable({ status: 'idle', progress: 0 });
+	const { subscribe, update } = writable({ status: 'idle', progress: 0 });
 
-  let xhr;
+	/** @type {XMLHttpRequest} */
+	let xhr;
 
-  return {
-    subscribe,
+	return {
+		subscribe,
 
-    start({ file, url, headers = {} }) {
-      return new Promise((resolve, reject) => {
+		/** @param {{file: File, url: string, headers: Record<string, string>}} input */
+		start({ file, url, headers = {} }) {
+			return new Promise((resolve, reject) => {
+				xhr = new XMLHttpRequest();
 
-        xhr = new XMLHttpRequest();
+				xhr.upload.addEventListener('progress', (event) => {
+					/** @type {number} */
+					let progress;
 
-        xhr.upload.addEventListener("progress", (event) => {
-          let progress;
+					if (event.lengthComputable) {
+						progress = (event.loaded / event.total) * 100;
+					}
 
-          if (event.lengthComputable) {
-            progress = (event.loaded / event.total) * 100;
-          }
+					update((state) => ({ ...state, status: 'uploading', progress }));
+				});
 
-          update(state => ({ ...state, status: 'uploading', progress }));
-        });
+				xhr.addEventListener('loadend', () => {
+					const status = xhr.status > 0 && xhr.status < 400 ? 'completed' : 'error';
 
-        xhr.addEventListener("loadend", (event) => {
-          const status = xhr.status > 0 && xhr.status < 400 ? 'completed' : 'error';
+					update((state) => ({ ...state, status }));
 
-          update(state => ({ ...state, status }));
+					if (status === 'error') {
+						reject();
+					} else {
+						resolve(xhr);
+					}
+				});
 
-          if (status === 'error') {
-            reject();
-          } else {
-            resolve(xhr);
-          }
-        });
+				xhr.upload.addEventListener('error', () => {
+					update((state) => ({ ...state, progress: 0, status: 'error' }));
+				});
 
-        xhr.upload.addEventListener("error", (event) => {
-          update(state => ({ ...state, progress: 0, status: 'error' }));
-        });
+				xhr.open('POST', url);
 
-        xhr.open('POST', url);
+				for (const [name, value] of Object.entries(headers)) {
+					xhr.setRequestHeader(name, value);
+				}
 
-        for (const [name, value] of Object.entries(headers)) {
-          xhr.setRequestHeader(name, value);
-        }
-
-        xhr.send(file);
-
-      });
-
-    }
-  }
+				xhr.send(file);
+			});
+		}
+	};
 }
 
 export default create_upload;

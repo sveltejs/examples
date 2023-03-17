@@ -2,11 +2,7 @@ import { fail } from '@sveltejs/kit';
 import { S3 } from '$lib/s3.server.js';
 import { env } from '$env/dynamic/private';
 
-import {
-	PutObjectCommand,
-	DeleteObjectCommand,
-	ListObjectsV2Command,
-} from '@aws-sdk/client-s3';
+import { PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load() {
@@ -27,15 +23,16 @@ export const actions = {
 		}
 
 		try {
-			return await S3.send(new PutObjectCommand({
-				Bucket: env.S3_BUCKET,
-				Key: file.name,
-				Body: await file.arrayBuffer(),
-			}));
+			return await S3.send(
+				new PutObjectCommand({
+					Bucket: env.S3_BUCKET,
+					Key: file.name,
+					Body: await file.arrayBuffer()
+				})
+			);
 		} catch (err) {
 			return fail(500);
 		}
-
 	},
 	async delete(event) {
 		const data = await event.request.formData();
@@ -47,10 +44,12 @@ export const actions = {
 		}
 
 		try {
-			return await S3.send(new DeleteObjectCommand({
-				Bucket: env.S3_BUCKET,
-				Key: key
-			}));
+			return await S3.send(
+				new DeleteObjectCommand({
+					Bucket: env.S3_BUCKET,
+					Key: key
+				})
+			);
 		} catch (err) {
 			return fail(500);
 		}
