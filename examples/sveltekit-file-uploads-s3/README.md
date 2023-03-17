@@ -1,25 +1,23 @@
-# SvelteKit file uploads using S3
+# SvelteKit S3 File Uploads Example
 
-This example demonstrates how you can handle file uploads with SvelteKit and an S3 compatible service such as Cloudflare R2, DigitalOcean Spaces, AWS S3 etc. in two different ways. The first form first sends the file as `FormData` to the SvelteKit server and from there uploads it to S3. The second form for large files generates a presigned URL on the server that the client then uses to directly upload the file to S3 withough the file first having to go through the SvelteKit server.
+This example demonstrates how you can upload files with SvelteKit in two different ways to an S3 compatible storage provider such as Cloudflare R2, DigitalOcean Spaces, AWS S3 etc.
 
-## Form 1: Small file uploads
+## Form 1: Small file
+The first form first sends the file as `FormData` to the SvelteKit server and from there uploads it to S3.
 
-Key things to know are:
+- It works with and without JavaScript
+- It uses FormData and SvelteKit's form actions
+- It should only be used for small files such as avatar images because the whole file first needs to be parsed in memory with `event.request.formData()` and there is no upload progress indicator.
 
-- Works with and without JavaScript
-- Uses FormData and SvelteKit's form actions
-- Should only be used for small files such as avatar images because there is no progress indicator and the file first needs parsing the whole body with `event.request.formData()`
-
-## Form 2: Large file uploads
-
-Key things to know are:
+## Form 2: Small and large file
+The second form for both small and large files generates a presigned URL on the server that the client then uses to directly upload the file to an S3 provider from the frontend.
 
 - JavaScript is required for this to work
-- The upload logic is encapsulated in a custom store
+- A custom store handles all the requests and calculates the upload progress
 - `src/routes/presigned-url/+server.js` generates the upload URL
-- `XMLHTTPRequest` is used to upload the file because `fetch` cannot be used (yet) to calculate the upload progress
+- `XMLHTTPRequest` is used to make the requests because `fetch` cannot be used (yet) to calculate the upload progress
 
-To try out this example in development you can create a `.env` file in the project root with the following environment variables and run `pnpm i && pnpm dev`
+To try out this example you can create a `.env` file in the project root with the following environment variables and run `pnpm i && pnpm dev`
 
 ```
 S3_REGION='<region>'
