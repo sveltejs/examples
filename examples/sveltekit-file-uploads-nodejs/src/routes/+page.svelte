@@ -19,7 +19,7 @@
 		easing: cubicOut
 	});
 
-	$: progress.set(Math.ceil($upload.progress) / 100);
+	$: progress.set($upload.progress / 100);
 
 	/** @param {SubmitEvent} event */
 	async function handle_large_submit(event) {
@@ -78,7 +78,7 @@
 		<progress value={$progress} />
 		<button disabled={is_large_submitting} class:--loading={is_large_submitting}>
 			{#if is_large_submitting}
-				Uploading...
+				Uploading... {$upload.progress}%
 			{:else}
 				Upload
 			{/if}

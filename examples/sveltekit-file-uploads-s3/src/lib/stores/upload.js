@@ -36,7 +36,7 @@ export function create_upload() {
 							let progress = 0;
 
 							if (event.lengthComputable) {
-								progress = (event.loaded / event.total) * 100;
+								progress = Math.round((event.loaded / event.total) * 100);
 							}
 
 							update((state) => ({ ...state, status: 'uploading', progress }));
