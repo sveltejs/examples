@@ -5,7 +5,7 @@
 
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { S3_PUBLIC_BUCKET_URL } from '$env/static/public';
+	import { PUBLIC_S3_BUCKET_URL } from '$env/static/public';
 	import create_upload from '$lib/stores/upload.js';
 
 	/** @type {import('./$types').PageData} */
@@ -98,7 +98,7 @@
 					<span class="file__size">{(file.Size / 1000).toFixed(1)} kB</span>
 					<a
 						class="file__name"
-						href="{S3_PUBLIC_BUCKET_URL}/{file.Key}"
+						href="{PUBLIC_S3_BUCKET_URL}/{file.Key}"
 						target="_blank"
 						rel="noreferrer"
 					>
