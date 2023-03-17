@@ -24,5 +24,3 @@ The second form for both small and large files uses a custom store and posts the
 - The file object from the file input element is used as the body of the request
 - Additional information such as the file's name is passed to the server using custom request headers such as `x-file-name`
 - If a file with the same name has already been uploaded before the endpoint closes the connection by calling `event.body.cancel()`
-
-
