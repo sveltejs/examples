@@ -27,5 +27,5 @@ S3_BUCKET='<S3 bucket name>'
 S3_ENDPOINT='<S3 API URL>'
 S3_ACCESS_KEY_ID='<Your S3 access key ID>'
 S3_SECRET_ACCESS_KEY='<Your S3 secret access id>'
-PUBLIC_S3_BUCKET_URL='<Public S3 bucket URL>'
+S3_PUBLIC_BUCKET_URL='<Public S3 bucket URL>'
 ```
