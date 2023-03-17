@@ -1,15 +1,17 @@
-# SvelteKit S3 File Uploads Example
+# SvelteKit file uploads using S3
 
 This example demonstrates how you can upload files with SvelteKit in two different ways to an S3 compatible storage provider such as Cloudflare R2, DigitalOcean Spaces, AWS S3 etc.
 
-## Form 1: Small file
+## Form 1: Small files
+
 The first form first sends the file as `FormData` to the SvelteKit server and from there uploads it to S3.
 
 - It works with and without JavaScript
 - It uses FormData and SvelteKit's form actions
 - It should only be used for small files such as avatar images because the whole file first needs to be parsed in memory with `event.request.formData()` and there is no upload progress indicator.
 
-## Form 2: Small and large file
+## Form 2: Small and large files
+
 The second form for both small and large files generates a presigned URL on the server that the client then uses to directly upload the file to an S3 provider from the frontend.
 
 - JavaScript is required for this to work

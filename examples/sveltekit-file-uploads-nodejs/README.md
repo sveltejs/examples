@@ -1,4 +1,4 @@
-# SvelteKit file uploads with Node.js
+# SvelteKit file uploads using Node.js
 
 This example demonstrates how you can upload files with SvelteKit and Node.js in two different ways.
 
@@ -6,14 +6,16 @@ This example demonstrates how you can upload files with SvelteKit and Node.js in
 
 Both forms write files to the local disk into a directory specified by the `FILES_DIR` environment variable. Uploaded files are served through the `src/routes/files/[name]/+server.js` endpoint.
 
-## Form 1: Small file
+## Form 1: Small files
+
 This first form sends the file as `FormData` to the SvelteKit server.
 
 - It works with and without JavaScript
 - It uses FormData and SvelteKit's form actions
 - It should only be used for small files such as avatar images because the whole file first needs to be parsed in memory with `event.request.formData()` and there is no upload progress indicator.
 
-## Form 2: Small and large file
+## Form 2: Small and large files
+
 The second form for both small and large files uses a custom store and posts the raw file body to the `upload/+server.js` endpoint.
 
 - JavaScript is required for this to work
