@@ -8,7 +8,6 @@
 
 <style>
 	main {
-		margin-block-start: 3rem;
 		padding: 1rem;
 	}
 

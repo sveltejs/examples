@@ -104,14 +104,13 @@
 						action="?/delete"
 						enctype="multipart/form-data"
 						use:enhance={({ submitter }) => {
-							submitter?.classList.add('--loading');
 							submitter?.setAttribute('disabled', 'true');
+							submitter?.classList.add('--loading');
 
-							return ({ update }) => {
-								update().then(() => {
-									submitter?.classList.remove('--loading');
-									submitter?.removeAttribute('disabled');
-								});
+							return async ({ update }) => {
+								await update();
+								submitter?.classList.remove('--loading');
+								submitter?.removeAttribute('disabled');
 							};
 						}}
 					>
@@ -137,7 +136,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		padding: 1rem;
-		border-radius: var(--border-radius);
+		border-radius: 7px;
 		background-color: hsla(0, 0%, 0%, 0.07);
 
 		flex: 1 0 20rem;
@@ -156,7 +155,7 @@
 		align-items: center;
 		gap: 1rem;
 		padding: 0.5rem;
-		border-radius: var(--border-radius);
+		border-radius: 7px;
 		font-size: 1.2rem;
 
 		transition: background-color, 100ms;
