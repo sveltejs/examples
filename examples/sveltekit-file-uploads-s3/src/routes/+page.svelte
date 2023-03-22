@@ -105,7 +105,7 @@
 						{file.Key}
 					</a>
 					<form
-						class="file__actions"
+						class="file__delete-action"
 						method="POST"
 						action="?/delete"
 						enctype="multipart/form-data"
@@ -180,7 +180,7 @@
 		flex: 1 1 auto;
 	}
 
-	.file__actions {
+	.file__delete-action {
 		flex: 0 0 auto;
 	}
 </style>
