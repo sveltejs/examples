@@ -2,13 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
+import { FILES_DIR } from '../files-dir';
 
-import { env } from '$env/dynamic/private';
-
-const DIR = env.FILES_DIR ?? '.temp-files';
-
-if (!fs.existsSync(DIR)) {
-	fs.mkdirSync(DIR, { recursive: true });
+if (!fs.existsSync(FILES_DIR)) {
+	fs.mkdirSync(FILES_DIR, { recursive: true });
 }
 
 /** @type {import('./$types').RequestHandler} */
@@ -26,7 +23,7 @@ export async function POST(event) {
 		return new Response(null, { status: 400 });
 	}
 
-	const file_path = path.normalize(path.join(DIR, file_name));
+	const file_path = path.normalize(path.join(FILES_DIR, file_name));
 
 	if (fs.existsSync(file_path)) {
 		event.request.body.cancel();

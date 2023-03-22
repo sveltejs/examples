@@ -11,7 +11,7 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	let upload = create_upload();
+	const upload = create_upload();
 
 	let is_small_submitting = false;
 	let is_large_submitting = false;

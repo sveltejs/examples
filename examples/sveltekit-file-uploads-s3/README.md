@@ -19,7 +19,7 @@ The second form for both small and large files generates a presigned URL on the 
 - `src/routes/presigned-url/+server.js` generates the upload URL
 - `XMLHTTPRequest` is used to make the requests because `fetch` cannot be used (yet) to calculate the upload progress
 
-To try out this example you can create a `.env` file in the project root with the following environment variables and run `pnpm i && pnpm dev`
+To try out this example create a `.env` file in the project root with the following environment variables and run `pnpm i && pnpm dev`
 
 ```
 S3_REGION='<region>'
