@@ -2,7 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { Readable } from 'node:stream';
 
-const DIR = process.env.FILES_DIR ?? 'temp-files';
+import { env } from '$env/dynamic/private';
+
+const DIR = env.FILES_DIR ?? '.temp-files';
 
 if (!fs.existsSync(DIR)) {
 	fs.mkdirSync(DIR, { recursive: true });
