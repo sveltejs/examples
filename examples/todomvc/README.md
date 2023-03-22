@@ -1,18 +1,6 @@
-# create-svelte
+# Todo MVC
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+An example implementation of the Todo MVC app. It uses SvelteKit's [format actions](https://kit.svelte.dev/docs/form-actions). It uses progressive enhancement, which means the app is still functional without JavaScript - but when it _is_ available, it provides a nicer experience by having optimistic UI updates, for example showing the new TODO item before it actually exists in the database.
 
 ## Developing
 
