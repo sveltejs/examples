@@ -15,7 +15,7 @@ export const actions = {
 	async upload(event) {
 		const data = await event.request.formData();
 
-		const file = data.get('file');
+		const file = /** @type {File} */ (data.get('file'));
 
 		if (!file || file instanceof File === false || file.size === 0) {
 			return fail(400);
@@ -26,7 +26,7 @@ export const actions = {
 				new PutObjectCommand({
 					Bucket: env.S3_BUCKET,
 					Key: file.name,
-					Body: await file.arrayBuffer()
+					Body: /** @type {Buffer} */ (await file.arrayBuffer())
 				})
 			);
 		} catch (err) {

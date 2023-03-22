@@ -2,7 +2,6 @@
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 	import { PUBLIC_S3_BUCKET_URL } from '$env/static/public';
@@ -28,7 +27,7 @@
 		is_large_submitting = true;
 
 		const target = /** @type {EventTarget & HTMLFormElement} */ (event.target);
-		const file = target.elements.file.files[0];
+		const file = /** @type {any} */ (target.elements).file.files[0];
 
 		await upload.start({ file });
 		await invalidateAll();
