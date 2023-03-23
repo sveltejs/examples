@@ -17,7 +17,7 @@ export const actions = {
 
 		const file = /** @type {File} */ (data.get('file'));
 
-		if (!file || file instanceof File === false || file.size === 0) {
+		if (file instanceof File === false || file.size === 0) {
 			return fail(400);
 		}
 
