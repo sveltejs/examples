@@ -54,7 +54,7 @@ const mimes = {
 
 	/** @param {string} string */
 	lookup(string) {
-		const ext = string.trim().toLowerCase().split('.').at(-1);
+		const ext = string.toLowerCase().split('.').at(-1);
 		return (ext && this[/** @type {keyof typeof mimes} */ (ext)]) ?? 'application/octet-stream';
 	}
 };
