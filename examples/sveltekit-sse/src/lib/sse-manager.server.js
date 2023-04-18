@@ -87,18 +87,21 @@ function create_sse_manager({ max_clients = 1_000, max_connections_per_client = 
 		},
 
 		/**
-		 * @param {string | number} client_id
+		 * @param {string | number | Array<string | number>} client_id
 		 * @param {Message} message
 		 */
 		emit_to(client_id, message) {
-			/** @type {Set<ReadableStreamDefaultController> | undefined} */
-			const controllers = clients.get(client_id);
-
-			if (!controllers) return;
+			const client_ids = Array.isArray(client_id) ? client_id : [client_id];
 
 			const message_string = create_message_string(message);
+			
+			for (const client_id of client_ids) {
+				const controllers = clients.get(client_id);
 
-			controllers.forEach((c) => c.enqueue(message_string));
+				if (!controllers) continue;
+
+				controllers.forEach((c) => c.enqueue(message_string));
+			}
 		},
 
 		/**
