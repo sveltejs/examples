@@ -113,6 +113,10 @@ function create_sse_manager({ max_clients = 1_000, max_connections_per_client = 
 
 				controllers.forEach((c) => c.enqueue(message_string));
 			}
+		},
+
+		get_clients() {
+			return clients;
 		}
 	};
 }
