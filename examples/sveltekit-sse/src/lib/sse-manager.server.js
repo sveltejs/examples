@@ -1,10 +1,16 @@
 /**
- * https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
- * @typedef {Object} Message -
+ * @typedef {Object} Message - https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
  * @property {string} data - The data field for the message.
  * @property {string} [event] - A string identifying the type of event described. If this is specified, an event will be dispatched on the browser to the listener for the specified event name; the website source code should use addEventListener() to listen for named events. The onmessage handler is called if no event name is specified for a message.
  * @property {string | number} [id] - The event ID to set the EventSource object's last event ID value.
  * @property {number} [retry] - The reconnection time. If the connection to the server is lost, the browser will wait for the specified time before attempting to reconnect. This must be an integer, specifying the reconnection time in milliseconds.
+ */
+
+/**
+ * @callback ConnectionCallback
+ * @param {string | number} client_id
+ * @param {Set<ReadableStreamDefaultController>} controllers
+ * @returns {void}
  */
 
 /** @param {Message} message */
@@ -16,12 +22,12 @@ function create_message_string(message) {
 	);
 }
 
-function create_sse({ max_clients = 1_000, max_connections_per_client = 3 } = {}) {
+function create_sse_manager({ max_clients = 1_000, max_connections_per_client = 3 } = {}) {
 	/** @type {Map<string | number, Set<ReadableStreamDefaultController>>} */
 	const clients = new Map();
-	/** @type {Set<(client_id: string | number, controllers: Set<ReadableStreamDefaultController>) => void>} */
+	/** @type {Set<ConnectionCallback>} */
 	const on_connect_listeners = new Set();
-	/** @type {Set<(client_id: string | number, controllers: Set<ReadableStreamDefaultController>) => void>} */
+	/** @type {Set<ConnectionCallback>} */
 	const on_disconnect_listeners = new Set();
 
 	return {
@@ -70,12 +76,12 @@ function create_sse({ max_clients = 1_000, max_connections_per_client = 3 } = {}
 			return stream;
 		},
 
-		/** @param {(client_id: string | number, controllers: Set<ReadableStreamDefaultController>) => void} fn */
+		/** @param {ConnectionCallback} fn */
 		on_connect(fn) {
 			on_connect_listeners.add(fn);
 		},
 
-		/** @param {(client_id: string | number, controllers: Set<ReadableStreamDefaultController>) => void} fn */
+		/** @param {ConnectionCallback} fn */
 		on_disconnect(fn) {
 			on_disconnect_listeners.add(fn);
 		},
@@ -111,6 +117,6 @@ function create_sse({ max_clients = 1_000, max_connections_per_client = 3 } = {}
 	};
 }
 
-const sse = create_sse();
+const sse_manager = create_sse_manager();
 
-export default sse;
+export default sse_manager;
