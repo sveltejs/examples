@@ -77,12 +77,12 @@ function create_sse_manager({ max_clients = 1_000, max_connections_per_client = 
 		},
 
 		/** @param {ConnectionCallback} cb */
-		on_connect(cb) {
+		on_connected(cb) {
 			on_connected_callbacks.add(cb);
 		},
 
 		/** @param {ConnectionCallback} cb */
-		on_disconnect(cb) {
+		on_disconnected(cb) {
 			on_disconnected_callbacks.add(cb);
 		},
 
