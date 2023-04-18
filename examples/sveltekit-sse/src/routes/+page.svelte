@@ -18,6 +18,14 @@
 		</form>
 	</div>
 
+	<h2>Messages</h2>
+
+	<ol class="messages box">
+		{#each $sse.messages as message (message)}
+			<li class="message">{message.text}</li>
+		{/each}
+	</ol>
+
 	<h2>Connected clients</h2>
 
 	<ul class="clients">
@@ -38,25 +46,24 @@
 			</li>
 		{/each}
 	</ul>
-
-	<ol class="messages">
-		{#each $sse.messages as message (message)}
-			<li class="message">{message.text}</li>
-		{/each}
-	</ol>
 </main>
 
 <style>
 	main {
-		max-width: 40em;
+		max-width: 40rem;
 		margin-inline: auto;
+		padding: 1rem;
 	}
 
 	.clients {
-		list-style: none;
 		display: flex;
 		flex-direction: column;
 		row-gap: 2rem;
+	}
+
+	ul,
+	ol {
+		list-style: none;
 	}
 
 	p {
