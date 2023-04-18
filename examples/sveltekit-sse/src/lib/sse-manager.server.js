@@ -26,9 +26,9 @@ function create_sse_manager({ max_clients = 1_000, max_connections_per_client = 
 	/** @type {Map<string | number, Set<ReadableStreamDefaultController>>} */
 	const clients = new Map();
 	/** @type {Set<ConnectionCallback>} */
-	const on_connected_listeners = new Set();
+	const on_connected_callbacks = new Set();
 	/** @type {Set<ConnectionCallback>} */
-	const on_disconnected_listeners = new Set();
+	const on_disconnected_callbacks = new Set();
 
 	return {
 		/**
@@ -60,7 +60,7 @@ function create_sse_manager({ max_clients = 1_000, max_connections_per_client = 
 					controller = _controller;
 					controllers.add(controller);
 
-					on_connected_listeners.forEach((cb) => cb(client_id, controllers));
+					on_connected_callbacks.forEach((cb) => cb(client_id, controllers));
 				},
 				cancel() {
 					controllers.delete(controller);
@@ -69,7 +69,7 @@ function create_sse_manager({ max_clients = 1_000, max_connections_per_client = 
 						clients.delete(client_id);
 					}
 
-					on_disconnected_listeners.forEach((cb) => cb(client_id, controllers));
+					on_disconnected_callbacks.forEach((cb) => cb(client_id, controllers));
 				}
 			});
 
@@ -78,12 +78,12 @@ function create_sse_manager({ max_clients = 1_000, max_connections_per_client = 
 
 		/** @param {ConnectionCallback} cb */
 		on_connect(cb) {
-			on_connected_listeners.add(cb);
+			on_connected_callbacks.add(cb);
 		},
 
 		/** @param {ConnectionCallback} cb */
 		on_disconnect(cb) {
-			on_disconnected_listeners.add(cb);
+			on_disconnected_callbacks.add(cb);
 		},
 
 		/**
