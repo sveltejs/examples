@@ -17,20 +17,27 @@ function create_sse_store() {
 		event_source = new EventSource('/sse');
 
 		event_source.addEventListener('error', (event) => {
+			console.info('error')
 			update((value) => ({ ...value, status: 'error' }));
 		});
 
 		event_source.addEventListener('open', (event) => {
+			console.info('open')
+
 			update((value) => ({ ...value, status: 'open' }));
 		});
 
 		event_source.addEventListener('client:list', (event) => {
-			const { clients } = JSON.parse(event.data);
+			console.info('client:list')
 
-			update((value) => ({ ...value, clients }));
+			const json = JSON.parse(event.data);
+
+			update((value) => ({ ...value, ...json }));
 		});
 
 		event_source.addEventListener('client:message', (event) => {
+			console.info('client:message')
+
 			const json = JSON.parse(event.data);
 
 			update((value) => {

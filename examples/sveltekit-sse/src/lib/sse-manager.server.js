@@ -8,7 +8,7 @@
 
 /**
  * @callback ConnectionCallback
- * @param {string | number} client_id
+ * @param {string | number} id
  * @param {Set<ReadableStreamDefaultController>} controllers
  * @returns {void}
  */
@@ -32,20 +32,20 @@ function create_sse_manager({ max_clients = 1_000, max_connections_per_client = 
 
 	return {
 		/**
-		 * @param {string | number} client_id
+		 * @param {string | number} id
 		 * @returns {ReadableStream | void}
 		 */
-		connect(client_id) {
+		connect(id) {
 			if (clients.size >= max_clients) {
 				return;
 			}
 
-			if (clients.has(client_id) === false) {
-				clients.set(client_id, new Set());
+			if (clients.has(id) === false) {
+				clients.set(id, new Set());
 			}
 
 			const controllers = /** @type {Set<ReadableStreamDefaultController>} */ (
-				clients.get(client_id)
+				clients.get(id)
 			);
 
 			if (controllers.size >= max_connections_per_client) {
@@ -60,16 +60,16 @@ function create_sse_manager({ max_clients = 1_000, max_connections_per_client = 
 					controller = _controller;
 					controllers.add(controller);
 
-					on_connected_callbacks.forEach((cb) => cb(client_id, controllers));
+					on_connected_callbacks.forEach((cb) => cb(id, controllers));
 				},
 				cancel() {
 					controllers.delete(controller);
 
 					if (controllers.size === 0) {
-						clients.delete(client_id);
+						clients.delete(id);
 					}
 
-					on_disconnected_callbacks.forEach((cb) => cb(client_id, controllers));
+					on_disconnected_callbacks.forEach((cb) => cb(id, controllers));
 				}
 			});
 
@@ -87,16 +87,16 @@ function create_sse_manager({ max_clients = 1_000, max_connections_per_client = 
 		},
 
 		/**
-		 * @param {string | number | Array<string | number>} client_id
+		 * @param {string | number | Array<string | number>} id
 		 * @param {Message} message
 		 */
-		emit_to(client_id, message) {
-			const client_ids = Array.isArray(client_id) ? client_id : [client_id];
+		emit_to(id, message) {
+			const ids = Array.isArray(id) ? id : [id];
 
 			const message_string = create_message_string(message);
 			
-			for (const client_id of client_ids) {
-				const controllers = clients.get(client_id);
+			for (const id of ids) {
+				const controllers = clients.get(id);
 
 				if (!controllers) continue;
 
@@ -111,8 +111,8 @@ function create_sse_manager({ max_clients = 1_000, max_connections_per_client = 
 		emit_to_all(message, exclude = []) {
 			const message_string = create_message_string(message);
 
-			for (const [client_id, controllers] of clients) {
-				if (exclude.includes(client_id)) continue;
+			for (const [id, controllers] of clients) {
+				if (exclude.includes(id)) continue;
 
 				controllers.forEach((c) => c.enqueue(message_string));
 			}

@@ -13,7 +13,7 @@ export const actions = {
 	async emit_to(event) {
 		const data = await event.request.formData();
 
-		sse.emit_to(data.get('client_id'), {
+		sse.emit_to(data.get('id'), {
 			event: 'client:message',
 			data: JSON.stringify({ text: data.get('text') })
 		});

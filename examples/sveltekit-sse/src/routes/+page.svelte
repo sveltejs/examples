@@ -41,18 +41,23 @@
 	<h2>Connected clients</h2>
 
 	<ul class="clients">
-		{#each $sse.clients as client_id (client_id)}
+		{#each $sse.clients as client (client)}
 			<li class="client box">
-				<p>
-					Client ID: <strong class="client__id">{client_id} </strong>
-				</p>
+				<div>
+					<div>
+						Connections: <strong>{client.connections}</strong>
+					</div>
+					<div>
+						Client ID: <strong>{client.id}</strong>
+					</div>
+				</div>
 
 				<form action="?/emit_to" method="POST" use:enhance>
 					<div>
 						<label for="text">Message</label>
-						<input type="text" id="text:{client_id}" name="text" />
+						<input type="text" id="text:{client.id}" name="text" />
 					</div>
-					<input type="hidden" name="client_id" value={client_id} />
+					<input type="hidden" name="id" value={client.id} />
 					<button>Send</button>
 				</form>
 			</li>
@@ -70,7 +75,7 @@
 	.clients {
 		display: flex;
 		flex-direction: column;
-		row-gap: 2rem;
+		row-gap: 1rem;
 	}
 
 	.status {
