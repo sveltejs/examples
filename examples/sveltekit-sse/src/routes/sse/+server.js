@@ -23,10 +23,8 @@ sse.on_disconnected((client_id, controllers) => {
 });
 
 /** @type {import('./$types').RequestHandler} */
-export async function GET() {
-	const id = crypto.randomUUID();
-
-	const stream = sse.connect(id);
+export async function GET(event) {
+	const stream = sse.connect(event.locals.id);
 
 	if (!stream) {
 		return new Response(null, { status: 503 });
