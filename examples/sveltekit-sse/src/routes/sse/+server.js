@@ -2,7 +2,7 @@ import sse from '$lib/sse-manager.server.js';
 
 sse.on_connected((id, controllers) => {
 	// Send a list of all currently connected users to the user
-	const clients = Array.from(sse.get_clients(), ([id, controllers]) => ({
+	const clients = Array.from(sse.get_all_clients(), ([id, controllers]) => ({
 		id,
 		connections: controllers.size
 	}));
@@ -13,11 +13,9 @@ sse.on_connected((id, controllers) => {
 	});
 });
 
-// If the user has closed all connected tabs
-// send a message to all other users
 sse.on_disconnected((id, controllers) => {
 	// Send a list of all currently connected users to the user
-	const clients = Array.from(sse.get_clients(), ([id, controllers]) => ({
+	const clients = Array.from(sse.get_all_clients(), ([id, controllers]) => ({
 		id,
 		connections: controllers.size
 	}));

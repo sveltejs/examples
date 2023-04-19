@@ -118,7 +118,7 @@ function create_sse_manager({ max_clients = 1_000, max_connections_per_client = 
 			}
 		},
 
-		get_clients() {
+		get_all_clients() {
 			return clients;
 		}
 	};
