@@ -2,15 +2,21 @@
 	import '$lib/global.css';
 	import { enhance } from '$app/forms';
 	import sse from '$lib/sse-store.js';
-
-	$: console.log($sse);
 </script>
 
 <main>
 	<h1>SvelteKit SSE Example</h1>
 
-	{#if $sse.error}
-		<p class="error" role="alert">Connection failed or was rejected.</p>
+	{#if $sse.status}
+		<p
+			class="status"
+			class:--closed={$sse.status === 'closed'}
+			class:--open={$sse.status === 'open'}
+			class:--error={$sse.status === 'error'}
+			role="alert"
+		>
+			Status: <span>{$sse.status}</span>
+		</p>
 	{/if}
 
 	<div class="box">
@@ -67,8 +73,15 @@
 		row-gap: 2rem;
 	}
 
-	.error {
+	.status {
 		font-weight: 600;
+	}
+
+	.status.--open {
+		color: green;
+	}
+
+	.status.--error {
 		color: red;
 	}
 

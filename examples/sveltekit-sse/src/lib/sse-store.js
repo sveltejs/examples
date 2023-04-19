@@ -5,7 +5,7 @@ function create_sse_store() {
 	/** @type {EventSource | undefined} */
 	let event_source;
 
-	const { subscribe, update } = writable({ clients: [], messages: [], error: false }, () => {
+	const { subscribe, update } = writable({ clients: [], messages: [], status: 'closed' }, () => {
 		if (browser) {
 			connect();
 		}
@@ -17,10 +17,11 @@ function create_sse_store() {
 		event_source = new EventSource('/sse');
 
 		event_source.addEventListener('error', (event) => {
-			update((value) => {
-				value.error = true;
-				return value;
-			});
+			update((value) => ({ ...value, status: 'error' }));
+		});
+
+		event_source.addEventListener('open', (event) => {
+			update((value) => ({ ...value, status: 'open' }));
 		});
 
 		event_source.addEventListener('client:list', (event) => {
