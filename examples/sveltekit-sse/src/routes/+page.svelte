@@ -2,10 +2,16 @@
 	import '$lib/global.css';
 	import { enhance } from '$app/forms';
 	import sse from '$lib/sse-store.js';
+
+	$: console.log($sse);
 </script>
 
 <main>
 	<h1>SvelteKit SSE Example</h1>
+
+	{#if $sse.error}
+		<p class="error" role="alert">Connection failed or was rejected.</p>
+	{/if}
 
 	<div class="box">
 		<p>Send a message to all connected clients</p>
@@ -59,6 +65,11 @@
 		display: flex;
 		flex-direction: column;
 		row-gap: 2rem;
+	}
+
+	.error {
+		font-weight: 600;
+		color: red;
 	}
 
 	ul,
