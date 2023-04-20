@@ -6,12 +6,12 @@ function create_sse_store(init = true) {
 	let event_source;
 
 	const { subscribe, update } = writable({ clients: [], messages: [], status: 'closed' }, () => {
-		if (init) connect();
+		if (init) open();
 
 		return close;
 	});
 
-	function connect() {
+	function open() {
 		event_source = new EventSource('/sse');
 
 		event_source.addEventListener('error', (event) => {
