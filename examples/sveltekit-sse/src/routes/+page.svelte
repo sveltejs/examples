@@ -1,6 +1,7 @@
 <script>
 	import '$lib/global.css';
 	import { enhance } from '$app/forms';
+	import { slide } from 'svelte/transition';
 	import sse from '$lib/sse-store.js';
 </script>
 
@@ -34,7 +35,7 @@
 
 	<ol class="messages box">
 		{#each $sse.messages as message (message)}
-			<li class="message">{message.text}</li>
+			<li class="message" transition:slide={{ duration: 200 }}>{message.text}</li>
 		{/each}
 	</ol>
 
@@ -42,7 +43,7 @@
 
 	<ul class="clients">
 		{#each $sse.clients as client (client)}
-			<li class="client box">
+			<li class="client box" transition:slide={{ duration: 200 }}>
 				<div>
 					<div>
 						Connections: <strong>{client.connections}</strong>
