@@ -31,7 +31,11 @@ export async function GET({ params, request }) {
 	};
 
 	const nodejs_rstream = fs.createReadStream(file_path);
-	const web_rstream = Readable.toWeb(nodejs_rstream);
+
+	const web_rstream = Readable.toWeb(nodejs_rstream, {
+		// See: https://github.com/nodejs/node/issues/46347#issuecomment-1416310527
+		strategy: new CountQueuingStrategy({ highWaterMark: 100 })
+	});
 
 	return new Response(web_rstream, { headers });
 }
