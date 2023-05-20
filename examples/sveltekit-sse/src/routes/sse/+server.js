@@ -27,7 +27,11 @@ sse.on_disconnected((id, controllers) => {
 });
 
 /** @type {import('./$types').RequestHandler} */
-export async function GET(event) {
+export function GET(event) {
+	if (!event.locals.id) {
+		return new Response(null, { status: 401 });
+	}
+
 	const stream = sse.connect(event.locals.id);
 
 	if (!stream) {
