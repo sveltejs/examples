@@ -21,13 +21,15 @@
 
 	<div class="example">
 		<h2>Listening to the change event</h2>
-		<Counter on:change={(e) => alert('The count is ' + e.detail)} />
+		<Counter onchange={(count) => alert('The count is ' + count)} />
 	</div>
 
 	<div class="example">
 		<h2>Custom slot</h2>
-		<Counter let:count>
-			<p class="purple">The count is {count}</p>
+		<Counter>
+			{#snippet children({ count })}
+				<p class="purple">The count is {count}</p>
+			{/snippet}
 		</Counter>
 	</div>
 </main>

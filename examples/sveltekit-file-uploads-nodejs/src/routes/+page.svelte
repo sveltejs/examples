@@ -1,28 +1,28 @@
 <script>
-	import { tweened } from 'svelte/motion';
+	import { Tween } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { create_upload } from '$lib/stores/upload';
+	import { Upload } from '$lib/stores/upload.svelte.js';
 
-	/** @type {import('./$types').PageData} */
-	export let data;
+	/** @type {{data: import('./$types').PageData}} */
+	let { data } = $props();
 
-	const upload = create_upload();
+	const upload = new Upload();
 
-	let is_small_submitting = false;
-	let is_large_submitting = false;
+	let is_small_submitting = $state(false);
+	let is_large_submitting = $state(false);
 
-	const progress = tweened(0, {
+	const progress = Tween.of(() => upload.progress, {
 		duration: 400,
 		easing: cubicOut
 	});
 
-	$: progress.set($upload.progress / 100);
-
 	/** @param {SubmitEvent} event */
 	async function handle_large_submit(event) {
+		event.preventDefault();
+
 		is_large_submitting = true;
 
 		const target = /** @type {EventTarget & HTMLFormElement} */ (event.target);
@@ -70,15 +70,15 @@
 		</button>
 	</form>
 
-	<form class="large" on:submit|preventDefault={handle_large_submit}>
+	<form class="large" onsubmit={handle_large_submit}>
 		<div>
 			<label for="file">Select a large file</label>
 			<input type="file" name="file" id="file" required />
 		</div>
-		<progress value={$progress} />
+		<progress value={progress.current}></progress>
 		<button disabled={is_large_submitting} class:--loading={is_large_submitting}>
 			{#if is_large_submitting}
-				Uploading... {$upload.progress}%
+				Uploading... {upload.progress}%
 			{:else}
 				Upload
 			{/if}
@@ -93,7 +93,7 @@
 	{:else}
 		<ol class="files">
 			{#each data.files as file (file.name)}
-				<li class="file" transition:slide={{ duration: 200 }}>
+				<li class="file" transition:slide|global={{ duration: 200 }}>
 					<span class="file__size">{(file.size / 1000).toFixed(1)} kB</span>
 					<a class="file__name" href="/files/{file.name}" target="_blank" rel="noreferrer">
 						{file.name}
