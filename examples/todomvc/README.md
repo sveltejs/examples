@@ -1,6 +1,6 @@
 # Todo MVC
 
-An example implementation of the Todo MVC app. It uses SvelteKit's [format actions](https://kit.svelte.dev/docs/form-actions). It uses progressive enhancement, which means the app is still functional without JavaScript - but when it _is_ available, it provides a nicer experience by having optimistic UI updates, for example showing the new TODO item before it actually exists in the database.
+An example implementation of the Todo MVC app. It uses SvelteKit's [form actions](https://kit.svelte.dev/docs/form-actions). It uses progressive enhancement, which means the app is still functional without JavaScript - but when it _is_ available, it provides a nicer experience by having optimistic UI updates, for example showing the new TODO item before it actually exists in the database.
 
 ## Developing
 
