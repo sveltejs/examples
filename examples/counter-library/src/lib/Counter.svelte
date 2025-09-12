@@ -1,21 +1,30 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
+	import type { Snippet } from 'svelte';
 
-    export let count = 0;
+	interface Props {
+		count?: number;
+		children?: Snippet<[any]>;
+		onchange?: (count: number) => void;
+	}
 
-    const dispatch = createEventDispatcher<{ change: number }>();
+	let { count = 0, children, onchange }: Props = $props();
 
-    function increment() {
-        count++;
-        dispatch('change', count);
-    }
-    
-    function decrement() {
-        count--;
-        dispatch('change', count);
-    }
+	function increment() {
+		count++;
+		onchange?.(count);
+	}
+
+	function decrement() {
+		count--;
+		onchange?.(count);
+	}
 </script>
 
-<slot {count}><p>The count is {count}</p></slot>
-<button on:click={increment}>Increment</button>
-<button on:click={decrement}>Decrement</button>
+{#if children}
+	{@render children({ count })}
+{:else}
+	<p>The count is {count}</p>
+{/if}
+
+<button onclick={increment}>Increment</button>
+<button onclick={decrement}>Decrement</button>
